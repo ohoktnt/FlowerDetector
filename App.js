@@ -3,8 +3,26 @@ import {View, Text, Image, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-picker';
+import Tflite from 'tflite-react-native';
+
+// instantiate the tflite object in our memory so that we can use it and its functions
+let tflite = new Tflite();
+var modelFile = "models/model.tflite";
+var labelsFile = "models/labels.txt";
 
 export default class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      recognitions: null, // prediction data
+      source: null, // hold image user selected
+    }
+    tflite.loadModel({model: modelFile, labels: labelsFile}, (err, res) => {
+      if(err) console.log(err);
+      else console.log(res);
+    })
+  }
 
   selectGalleryImage() {
     const options = {};
@@ -17,7 +35,23 @@ export default class App extends Component {
         console.log("User pressed Custom Button")
       } else {
         // if no errors (code block above is error check)
-        console.log("Sucessfully opened library")
+        // console.log("Sucessfully opened library")
+        this.setState({
+          source: {uri: response.uri},
+        });
+        tflite.runModelOnImage({
+          path: response.path,
+          imageMean: 128,
+          imageStd: 128,
+          numResults: 5,
+          threshold: 0.05,
+        }, (err, res) => {
+          if(err) console.log(err);
+          else {
+            console.log(res[res.length -1]);
+            this.setState({recognitions: res[res.length -1]});
+          }
+        })
       }
     })
   }

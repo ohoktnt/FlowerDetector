@@ -20,6 +20,8 @@ target 'FlowerDetector' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'TfliteReactNative', :path => '../node_modules/tflite-react-native'
+
   target 'FlowerDetectorTests' do
     inherit! :complete
     # Pods for testing
