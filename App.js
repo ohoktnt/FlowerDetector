@@ -10,16 +10,16 @@ export default class App extends Component {
         colors={['#a8e063', '#56ab2f']}
         style={styles.linearGradient}>
         {/* Title and subtitle */}
-        <View>
-          <Text>Find Flowers</Text>
-          <Text>Python Neural Network</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Find Flowers</Text>
+          <Text style={styles.substitle}>Python Neural Network</Text>
         </View>
         {/* Output */}
-        <View>
+        <View style={styles.imageContainer}>
           <Text>Output</Text>
         </View>
         {/* Buttons */}
-        <View>
+        <View style={styles.buttonContainer}>
           <Button
             title="Camera Roll"
             buttonStyle={styles.button}
@@ -40,4 +40,33 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
   },
+  titleContainer: {
+    marginTop: 70,
+    marginLeft: 40,
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  substitle: {
+    color: 'white',
+    fontSize: 16,
+  },
+  button: {
+    width: 200,
+    height: 57,
+    backgroundColor: 'black',
+    borderRadius: 8,
+  },
+  buttonContainer: {
+    paddingBottom: 40,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  imageContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
