@@ -7,57 +7,60 @@ import Tflite from 'tflite-react-native';
 
 // instantiate the tflite object in our memory so that we can use it and its functions
 let tflite = new Tflite();
-var modelFile = "models/model.tflite";
-var labelsFile = "models/labels.txt";
+var modelFile = 'models/model.tflite';
+var labelsFile = 'models/labels.txt';
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       recognitions: null, // prediction data
       source: null, // hold image user selected
-    }
+    };
     tflite.loadModel({model: modelFile, labels: labelsFile}, (err, res) => {
-      if(err) console.log(err);
+      if (err) console.log(err);
       else console.log(res);
-    })
+    });
   }
 
   selectGalleryImage() {
     const options = {};
-    ImagePicker.launchImageLibrary(options, (response) => {
-      if(response.didCancel) {
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {
         console.log('Image Picker Error');
       } else if (response.customButton) {
-        console.log("User pressed Custom Button")
+        console.log('User pressed Custom Button');
       } else {
         // if no errors (code block above is error check)
         // console.log("Sucessfully opened library")
         this.setState({
           source: {uri: response.uri},
         });
-        tflite.runModelOnImage({
-          path: response.path,
-          imageMean: 128,
-          imageStd: 128,
-          numResults: 5,
-          threshold: 0.05,
-        }, (err, res) => {
-          if(err) console.log(err);
-          else {
-            console.log(res[res.length -1]);
-            this.setState({recognitions: res[res.length -1]});
-          }
-        })
+        tflite.runModelOnImage(
+          {
+            path: response.path,
+            imageMean: 128,
+            imageStd: 128,
+            numResults: 5,
+            threshold: 0.05,
+          },
+          (err, res) => {
+            if (err) console.log(err);
+            else {
+              console.log(res[res.length - 1]);
+              this.setState({recognitions: res[res.length - 1]});
+            }
+          },
+        );
       }
-    })
+    });
   }
 
-
   render() {
+    const {recognitions, source} = this.state;
+
     return (
       <LinearGradient
         colors={['#a8e063', '#56ab2f']}
@@ -69,7 +72,27 @@ export default class App extends Component {
         </View>
         {/* Output */}
         <View style={styles.imageContainer}>
-          <Image source={require('./assets/flower.png')} style={styles.flowerImage}></Image>
+          {recognitions ? (
+            <View>
+              <Image source={source} style={styles.flowerImage}></Image>
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  paddingTop: 10,
+                  fontSize: 25,
+                }}>
+                {recognitions['label'] +
+                  ' - ' +
+                  (recognitions['confidence'] * 100).toFixed(0) +
+                  '%'}
+              </Text>
+            </View>
+          ) : (
+            <Image
+              source={require('./assets/flower.png')}
+              style={styles.flowerImage}></Image>
+          )}
         </View>
         {/* Buttons */}
         <View style={styles.buttonContainer}>
@@ -125,6 +148,6 @@ const styles = StyleSheet.create({
   },
   flowerImage: {
     width: 250,
-    height: 250
-  }
+    height: 250,
+  },
 });
