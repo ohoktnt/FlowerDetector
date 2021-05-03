@@ -5,6 +5,24 @@ import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-picker';
 
 export default class App extends Component {
+
+  selectGalleryImage() {
+    const options = {};
+    ImagePicker.launchImageLibrary(options, (response) => {
+      if(response.didCancel) {
+        console.log('User Cancelled Image Picker');
+      } else if (response.error) {
+        console.log('Image Picker Error');
+      } else if (response.customButton) {
+        console.log("User pressed Custom Button")
+      } else {
+        // if no errors (code block above is error check)
+        console.log("Sucessfully opened library")
+      }
+    })
+  }
+
+
   render() {
     return (
       <LinearGradient
@@ -25,7 +43,8 @@ export default class App extends Component {
             title="Camera Roll"
             buttonStyle={styles.button}
             containerStyle={{margin: 5}}
-            titleStyle={{fontSize: 20}}></Button>
+            titleStyle={{fontSize: 20}}
+            onPress={this.selectGalleryImage.bind(this)}></Button>
           <Button
             title="Take a Photo"
             buttonStyle={styles.button}
