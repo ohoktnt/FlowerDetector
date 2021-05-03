@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
+import ImagePicker from 'react-native-image-picker';
 
 export default class App extends Component {
   render() {
@@ -16,7 +17,7 @@ export default class App extends Component {
         </View>
         {/* Output */}
         <View style={styles.imageContainer}>
-          <Text>Output</Text>
+          <Image source={require('./assets/flower.png')} style={styles.flowerImage}></Image>
         </View>
         {/* Buttons */}
         <View style={styles.buttonContainer}>
@@ -68,5 +69,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  flowerImage: {
+    width: 250,
+    height: 250
   }
 });
