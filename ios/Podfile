@@ -16,6 +16,8 @@ target 'FlowerDetector' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
   target 'FlowerDetectorTests' do
     inherit! :complete
     # Pods for testing
